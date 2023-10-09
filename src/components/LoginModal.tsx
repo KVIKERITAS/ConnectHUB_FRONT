@@ -1,41 +1,38 @@
+import React from 'react'
 import {useForm} from 'react-hook-form'
+import {loginSchema, TLoginSchema} from '../models/typesForm.ts'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {AiOutlineClose} from 'react-icons/ai'
-import {registerSchema, TRegisterSchema} from '../models/typesForm.ts'
-import React from 'react'
 
-type TRegisterModal = {
-  showRegisterModal: boolean
-  setShowRegisterModal: React.Dispatch<React.SetStateAction<boolean>>
+type TLoginModal = {
+  showLoginModal: boolean
+  setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const RegisterModal = ({
-  showRegisterModal,
-  setShowRegisterModal,
-}: TRegisterModal) => {
+const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
   const {
     register,
     formState: {errors, isSubmitting},
     handleSubmit,
     reset,
-  } = useForm<TRegisterSchema>({
+  } = useForm<TLoginSchema>({
     mode: 'onBlur',
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = (data: TRegisterSchema) => {
+  const onSubmit = (data: TLoginSchema) => {
     console.log(data)
     reset()
   }
 
   return (
     <>
-      {showRegisterModal && (
+      {showLoginModal && (
         <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
           <div className="w-[400px] flex flex-col">
             <button
               className="text-white text-xl place-self-end"
-              onClick={() => setShowRegisterModal(false)}
+              onClick={() => setShowLoginModal(false)}
             >
               <AiOutlineClose className="bg-gray-900" />
             </button>
@@ -50,7 +47,7 @@ const RegisterModal = ({
                 <p className="font-bold">ConnectHub</p>
               </div>
               <h5 className="text-xl text-white mb-5 ml-1">
-                Create your account:
+                Login to your account:
               </h5>
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -78,23 +75,12 @@ const RegisterModal = ({
                   <p className="h-[24px]"></p>
                 )}
 
-                <input
-                  placeholder="Confirm Password"
-                  {...register('confirmPassword')}
-                  className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
-                />
-                {errors.confirmPassword ? (
-                  <p className="text-red-500">{`${errors.confirmPassword.message}`}</p>
-                ) : (
-                  <p className="h-[24px]"></p>
-                )}
-
                 <button
                   type="submit"
                   className="text-white p-2 bg-gray-900 rounded font-bold hover:bg-gray-800"
                   disabled={isSubmitting}
                 >
-                  REGISTER
+                  LOGIN
                 </button>
               </form>
             </div>
@@ -105,4 +91,4 @@ const RegisterModal = ({
   )
 }
 
-export default RegisterModal
+export default LoginModal

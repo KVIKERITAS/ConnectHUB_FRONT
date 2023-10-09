@@ -14,4 +14,10 @@ export const registerSchema = z
     path: ['confirmPassword'],
   })
 
+export const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+})
+
 export type TRegisterSchema = z.infer<typeof registerSchema>
+export type TLoginSchema = z.infer<typeof loginSchema>

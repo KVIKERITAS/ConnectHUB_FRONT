@@ -1,8 +1,14 @@
+import React from 'react'
+
 type THeroSection = {
   setShowRegisterModal: React.Dispatch<React.SetStateAction<boolean>>
+  setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const HeroSection = ({setShowRegisterModal}: THeroSection) => {
+const HeroSection = ({
+  setShowRegisterModal,
+  setShowLoginModal,
+}: THeroSection) => {
   return (
     <div className="container flex flex-wrap items-center justify-center mx-auto bg-gray-900 text-white md:px12 md:flex-row">
       <div className="lg:w-1/2">
@@ -23,11 +29,14 @@ const HeroSection = ({setShowRegisterModal}: THeroSection) => {
           people and things that matter most in your life.
         </p>
         <div className="flex justify-center mt-14 lg:justify-start gap-1">
-          <button className="text-white bg-indigo-600 font-medium rounded-lg px-5 py-4 text-center hover:bg-indigo-500 hover:drop-shadow-md transition duration-300 ease-in-out">
+          <button
+            className="text-white bg-gray-800 font-medium rounded-lg px-5 py-4 text-center hover:bg-gray-700 hover:drop-shadow-md transition duration-300 ease-in-out"
+            onClick={() => setShowLoginModal(true)}
+          >
             LOGIN
           </button>
           <button
-            className="text-gray-900 bg-gray-200 font-medium rounded-lg px-5 py-4 text-center hover:bg-gray-300 hover:drop-shadow-md transition duration-300 ease-in-out"
+            className="text-gray-900 bg-gray-400 font-medium rounded-lg px-5 py-4 text-center hover:bg-gray-300 hover:drop-shadow-md transition duration-300 ease-in-out"
             onClick={() => setShowRegisterModal(true)}
           >
             REGISTER
