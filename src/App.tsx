@@ -8,7 +8,7 @@ import InboxPage from './pages/InboxPage.tsx'
 import UsersPage from './pages/UsersPage.tsx'
 
 function App() {
-  const [user, setUser] = useState(true)
+  const [user, setUser] = useState(false)
 
   return (
     <>
