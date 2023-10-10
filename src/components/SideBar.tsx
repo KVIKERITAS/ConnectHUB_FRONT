@@ -6,11 +6,24 @@ import {
   AiOutlineUser,
 } from 'react-icons/ai'
 import {BiLogOut} from 'react-icons/bi'
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
+import {useUserStore} from '../store/userStore.ts'
 
-const SideBar = () => {
+type TSideBarProps = {
+  setShowEditProfileModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const SideBar = ({setShowEditProfileModal}: TSideBarProps) => {
   const [openMenu, setOpenMenu] = useState(false)
+  const {user, setUser} = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+  }))
+
+  const logOut = () => {
+    setUser(null)
+  }
 
   return (
     <div
@@ -20,7 +33,7 @@ const SideBar = () => {
     >
       <HiArrowCircleLeft
         size="3em"
-        className={`absolute cursor-pointer -right-6 top-9 rounded-full bg-gray-900 duration-300 ${
+        className={`absolute cursor-pointer -right-6 top-9 rounded-full bg-gray-900 duration-300 hidden md:block ${
           !openMenu && 'rotate-180'
         }`}
         onClick={() => setOpenMenu(!openMenu)}
@@ -45,7 +58,7 @@ const SideBar = () => {
           to="/"
           className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md"
         >
-          <AiOutlineHome size="2em" />
+          <AiOutlineHome size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Home
           </span>
@@ -54,7 +67,7 @@ const SideBar = () => {
           to="/inbox"
           className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md"
         >
-          <AiOutlineInbox size="2em" />
+          <AiOutlineInbox size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Inbox
           </span>
@@ -63,20 +76,33 @@ const SideBar = () => {
           to="/users"
           className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md"
         >
-          <AiOutlineUser size="2em" />
+          <AiOutlineUser size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Users
           </span>
         </Link>
         <li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10">
-          <AiFillPlusSquare size="2em" />
+          <AiFillPlusSquare size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Post
           </span>
         </li>
 
-        <li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10">
-          <BiLogOut size="2em" />
+        <li
+          className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10"
+          onClick={() => setShowEditProfileModal(true)}
+        >
+          <img className="w-[24px] h-[24px]" src={user?.image} alt="" />
+          <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
+            {user?.username}
+          </span>
+        </li>
+
+        <li
+          className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10"
+          onClick={logOut}
+        >
+          <BiLogOut size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Logout
           </span>

@@ -3,6 +3,9 @@ import {useForm} from 'react-hook-form'
 import {loginSchema, TLoginSchema} from '../models/typesForm.ts'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {AiOutlineClose} from 'react-icons/ai'
+import axios from 'axios'
+import {toast} from 'react-toastify'
+import {useUserStore} from '../store/userStore.ts'
 
 type TLoginModal = {
   showLoginModal: boolean
@@ -10,6 +13,8 @@ type TLoginModal = {
 }
 
 const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
+  const setUser = useUserStore((state) => state.setUser)
+
   const {
     register,
     formState: {errors, isSubmitting},
@@ -20,9 +25,18 @@ const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = (data: TLoginSchema) => {
-    console.log(data)
-    reset()
+  const onSubmit = async (formData: TLoginSchema) => {
+    try {
+      const {data} = await axios.post('http://localhost:8080/api/users/login', {
+        ...formData,
+      })
+      setUser(data)
+      reset()
+      setShowLoginModal(false)
+    } catch (error) {
+      toast.error(error.response.data.message)
+      console.log(error)
+    }
   }
 
   return (

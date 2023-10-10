@@ -3,6 +3,8 @@ import {zodResolver} from '@hookform/resolvers/zod'
 import {AiOutlineClose} from 'react-icons/ai'
 import {registerSchema, TRegisterSchema} from '../models/typesForm.ts'
 import React from 'react'
+import axios from 'axios'
+import {toast} from 'react-toastify'
 
 type TRegisterModal = {
   showRegisterModal: boolean
@@ -23,9 +25,20 @@ const RegisterModal = ({
     resolver: zodResolver(registerSchema),
   })
 
-  const onSubmit = (data: TRegisterSchema) => {
-    console.log(data)
-    reset()
+  const onSubmit = async (formData: TRegisterSchema) => {
+    try {
+      const {data} = await axios.post(
+        'http://localhost:8080/api/users/register',
+        {
+          ...formData,
+        },
+      )
+      reset()
+      toast.success(data.message)
+      setShowRegisterModal(false)
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
   }
 
   return (
