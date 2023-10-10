@@ -14,7 +14,10 @@ type TLoginModal = {
 }
 
 const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
-  const setUser = useUserStore((state) => state.setUser)
+  const {setUser, setUserToken} = useUserStore((state) => ({
+    setUser: state.setUser,
+    setUserToken: state.setUserToken,
+  }))
 
   const {
     register,
@@ -31,7 +34,8 @@ const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
       const {data} = await axios.post('http://localhost:8080/api/users/login', {
         ...formData,
       })
-      setUser(data)
+      setUser(data.user)
+      setUserToken(data.token)
       reset()
       setShowLoginModal(false)
     } catch (error: unknown) {

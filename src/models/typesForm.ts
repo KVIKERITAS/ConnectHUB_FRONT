@@ -19,5 +19,15 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 })
 
+export const imageChangeSchema = z.object({
+  image: z.string().startsWith('http', 'Invalid link'),
+})
+
+export const passwordChangeSchema = z.object({
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
+})
+
 export type TRegisterSchema = z.infer<typeof registerSchema>
 export type TLoginSchema = z.infer<typeof loginSchema>
+export type TImageChangeSchema = z.infer<typeof imageChangeSchema>
+export type TPasswordChangeSchema = z.infer<typeof passwordChangeSchema>

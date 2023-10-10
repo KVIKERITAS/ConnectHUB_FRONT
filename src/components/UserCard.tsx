@@ -4,7 +4,7 @@ const UserCard = () => {
   return (
     <div className="flex bg-gray-900 p-2 rounded gap-2 flex-col justify-center items-center">
       <img
-        className="rounded-full h-[200px]"
+        className="rounded-full h-[150px]"
         src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
         alt=""
       />

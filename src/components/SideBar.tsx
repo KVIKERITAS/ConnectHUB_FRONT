@@ -92,7 +92,11 @@ const SideBar = ({setShowEditProfileModal}: TSideBarProps) => {
           className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10"
           onClick={() => setShowEditProfileModal(true)}
         >
-          <img className="w-[24px] h-[24px]" src={user?.image} alt="" />
+          <img
+            className="w-[24px] h-[24px] rounded-full"
+            src={user?.image}
+            alt=""
+          />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             {user?.username}
           </span>
