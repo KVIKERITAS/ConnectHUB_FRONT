@@ -5,6 +5,7 @@ import {registerSchema, TRegisterSchema} from '../models/typesForm.ts'
 import React from 'react'
 import axios from 'axios'
 import {toast} from 'react-toastify'
+import {IErrorBackend} from '../models/typesBackEndError.ts'
 
 type TRegisterModal = {
   showRegisterModal: boolean
@@ -37,7 +38,7 @@ const RegisterModal = ({
       toast.success(data.message)
       setShowRegisterModal(false)
     } catch (error) {
-      toast.error(error.response.data.message)
+      if (error) toast.error((error as IErrorBackend).response.data.message)
     }
   }
 

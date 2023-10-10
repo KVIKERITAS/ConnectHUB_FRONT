@@ -8,7 +8,6 @@ import InboxPage from './pages/InboxPage.tsx'
 import UsersPage from './pages/UsersPage.tsx'
 import {ToastContainer} from 'react-toastify'
 import {useUserStore} from './store/userStore.ts'
-import ProfilePage from './pages/ProfilePage.tsx'
 import {useState} from 'react'
 import EditProfileModal from './components/EditProfileModal.tsx'
 

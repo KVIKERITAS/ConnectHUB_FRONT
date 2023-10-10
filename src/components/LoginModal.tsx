@@ -6,6 +6,7 @@ import {AiOutlineClose} from 'react-icons/ai'
 import axios from 'axios'
 import {toast} from 'react-toastify'
 import {useUserStore} from '../store/userStore.ts'
+import {IErrorBackend} from '../models/typesBackEndError.ts'
 
 type TLoginModal = {
   showLoginModal: boolean
@@ -33,9 +34,10 @@ const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
       setUser(data)
       reset()
       setShowLoginModal(false)
-    } catch (error) {
-      toast.error(error.response.data.message)
-      console.log(error)
+    } catch (error: unknown) {
+      if (error) {
+        toast.error((error as IErrorBackend).response.data.message)
+      }
     }
   }
 
