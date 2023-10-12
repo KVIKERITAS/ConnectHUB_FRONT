@@ -1,27 +1,27 @@
 import React from 'react'
-import {useForm} from 'react-hook-form'
-import {loginSchema, TLoginSchema} from '../models/typesForm.ts'
-import {zodResolver} from '@hookform/resolvers/zod'
-import {AiOutlineClose} from 'react-icons/ai'
+import { useForm } from 'react-hook-form'
+import { loginSchema, TLoginSchema } from '../models/typesForm.ts'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { AiOutlineClose } from 'react-icons/ai'
 import axios from 'axios'
-import {toast} from 'react-toastify'
-import {useUserStore} from '../store/userStore.ts'
-import {IErrorBackend} from '../models/typesBackEndError.ts'
+import { toast } from 'react-toastify'
+import { useUserStore } from '../store/userStore.ts'
+import { IErrorBackend } from '../models/typesBackEndError.ts'
 
 type TLoginModal = {
   showLoginModal: boolean
   setShowLoginModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
-  const {setUser, setUserToken} = useUserStore((state) => ({
+const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
+  const { setUser, setUserToken } = useUserStore((state) => ({
     setUser: state.setUser,
     setUserToken: state.setUserToken,
   }))
 
   const {
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
     handleSubmit,
     reset,
   } = useForm<TLoginSchema>({
@@ -31,9 +31,12 @@ const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
 
   const onSubmit = async (formData: TLoginSchema) => {
     try {
-      const {data} = await axios.post('http://localhost:8080/api/users/login', {
-        ...formData,
-      })
+      const { data } = await axios.post(
+        'http://localhost:8080/api/users/login',
+        {
+          ...formData,
+        },
+      )
       setUser(data.user)
       setUserToken(data.token)
       reset()
@@ -58,7 +61,6 @@ const LoginModal = ({showLoginModal, setShowLoginModal}: TLoginModal) => {
             </button>
             <div className="bg-gray-800 rounded p-10 bg-opacity-90">
               <div className="flex justify-center items-center mb-5 text-white">
-                {' '}
                 <img
                   className={`w-[35px] h-[35px]`}
                   src="https://images.squarespace-cdn.com/content/v1/64b01b7f5312692724db8739/a2c54d31-22bd-492c-8c50-726a20448ff7/ChiAlpha_Icon_White.png"

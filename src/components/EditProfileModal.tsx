@@ -1,17 +1,17 @@
-import {AiOutlineClose} from 'react-icons/ai'
+import { AiOutlineClose } from 'react-icons/ai'
 import React from 'react'
-import {useUserStore} from '../store/userStore.ts'
-import {useForm} from 'react-hook-form'
+import { useUserStore } from '../store/userStore.ts'
+import { useForm } from 'react-hook-form'
 import {
   imageChangeSchema,
   passwordChangeSchema,
   TImageChangeSchema,
   TPasswordChangeSchema,
 } from '../models/typesForm.ts'
-import {zodResolver} from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import {toast} from 'react-toastify'
-import {IErrorBackend} from '../models/typesBackEndError.ts'
+import { toast } from 'react-toastify'
+import { IErrorBackend } from '../models/typesBackEndError.ts'
 
 type TEditProfileModalProps = {
   showEditProfileModal: boolean
@@ -21,7 +21,7 @@ const EditProfileModal = ({
   showEditProfileModal,
   setShowEditProfileModal,
 }: TEditProfileModalProps) => {
-  const {user, setUser, userToken} = useUserStore((state) => ({
+  const { user, setUser, userToken } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
     userToken: state.userToken,
@@ -29,7 +29,7 @@ const EditProfileModal = ({
 
   const {
     register,
-    formState: {errors, isSubmitting},
+    formState: { errors, isSubmitting },
     handleSubmit,
     reset,
   } = useForm<TImageChangeSchema>({
@@ -39,7 +39,7 @@ const EditProfileModal = ({
 
   const {
     register: registerPassword,
-    formState: {errors: errorsPassword, isSubmitting: isSubmittingPassword},
+    formState: { errors: errorsPassword, isSubmitting: isSubmittingPassword },
     handleSubmit: handleSubmitPassword,
     reset: resetPassword,
   } = useForm<TPasswordChangeSchema>({
@@ -49,12 +49,12 @@ const EditProfileModal = ({
 
   const onImageChange = async (imageData: TImageChangeSchema) => {
     try {
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         'http://localhost:8080/api/users/change/image',
         {
           ...imageData,
         },
-        {headers: {Authorization: `${userToken}`}},
+        { headers: { Authorization: `${userToken}` } },
       )
       setUser(data)
       toast.success('Image changed successfully')
@@ -69,15 +69,15 @@ const EditProfileModal = ({
 
   const onPasswordChange = async (passwordData: TPasswordChangeSchema) => {
     try {
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         'http://localhost:8080/api/users/change/password',
         {
           ...passwordData,
         },
-        {headers: {Authorization: `${userToken}`}},
+        { headers: { Authorization: `${userToken}` } },
       )
       toast.success(data.message)
-      reset()
+      resetPassword()
       setShowEditProfileModal(false)
     } catch (error: unknown) {
       if (error) {
@@ -133,6 +133,7 @@ const EditProfileModal = ({
                   <button
                     type="submit"
                     className="text-white p-2 bg-gray-900 rounded text-sm hover:bg-gray-700"
+                    disabled={isSubmitting}
                   >
                     Change image
                   </button>
@@ -157,6 +158,7 @@ const EditProfileModal = ({
                   <button
                     type="submit"
                     className="text-white p-2 bg-gray-900 rounded text-sm hover:bg-gray-700"
+                    disabled={isSubmittingPassword}
                   >
                     Change password
                   </button>

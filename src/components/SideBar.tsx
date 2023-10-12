@@ -1,22 +1,26 @@
-import {HiArrowCircleLeft} from 'react-icons/hi'
+import { HiArrowCircleLeft } from 'react-icons/hi'
 import {
   AiFillPlusSquare,
   AiOutlineHome,
   AiOutlineInbox,
   AiOutlineUser,
 } from 'react-icons/ai'
-import {BiLogOut} from 'react-icons/bi'
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import {useUserStore} from '../store/userStore.ts'
+import { BiLogOut } from 'react-icons/bi'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useUserStore } from '../store/userStore.ts'
 
 type TSideBarProps = {
   setShowEditProfileModal: React.Dispatch<React.SetStateAction<boolean>>
+  setShowCreatePostModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const SideBar = ({setShowEditProfileModal}: TSideBarProps) => {
+const SideBar = ({
+  setShowEditProfileModal,
+  setShowCreatePostModal,
+}: TSideBarProps) => {
   const [openMenu, setOpenMenu] = useState(false)
-  const {user, setUser} = useUserStore((state) => ({
+  const { user, setUser } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
   }))
@@ -81,7 +85,10 @@ const SideBar = ({setShowEditProfileModal}: TSideBarProps) => {
             Users
           </span>
         </Link>
-        <li className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10">
+        <li
+          className="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-800 rounded-md mt-10"
+          onClick={() => setShowCreatePostModal(true)}
+        >
           <AiFillPlusSquare size="1.7em" />
           <span className={`${!openMenu && 'hidden'} origin-left duration-300`}>
             Post
