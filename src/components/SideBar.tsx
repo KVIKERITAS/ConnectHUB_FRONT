@@ -33,7 +33,7 @@ const SideBar = ({
     <div
       className={`${
         openMenu ? 'w-52' : 'w-20'
-      } duration-300 h-screen relative p-5 pt-8`}
+      } duration-300 h-screen relative p-5 pt-8 shadow-xl`}
     >
       <HiArrowCircleLeft
         size="3em"
