@@ -1,12 +1,32 @@
-import { AiOutlineComment, AiOutlineHeart } from 'react-icons/ai'
+import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from 'react-icons/ai'
 import { TPost } from '../store/postStore.ts'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { useUserStore } from '../store/userStore.ts'
 
 type TCardProps = {
   post: TPost
 }
 
 const Card = ({ post }: TCardProps) => {
+  const userToken = useUserStore((state) => state.userToken)
+  const user = useUserStore((state) => state.user)
+  const isLiked = post.likes.find((like) => like === user?.id)
+
+  const handleLike = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/posts/like/${post._id}`,
+        { headers: { Authorization: `${userToken}` } },
+      )
+      toast.success(data.message)
+    } catch (error: unknown) {
+      toast.error((error as IErrorBackend).response.data.message)
+    }
+  }
+
   return (
     <div className="max-w-sm bg-gray-900 rounded-lg shadow">
       <img
@@ -29,21 +49,21 @@ const Card = ({ post }: TCardProps) => {
         >
           {post.message}
         </Link>
-        <div className="flex gap-2">
-          <a
-            href="#"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        <div className="flex gap-2 ">
+          <div
+            onClick={handleLike}
+            className="cursor-pointer inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            <AiOutlineHeart />
+            {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
             <span className="ml-1">{post.likes.length}</span>
-          </a>
-          <a
-            href="#"
+          </div>
+          <Link
+            to={`/post/${post._id}`}
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             <AiOutlineComment />
             <span className="ml-1">{post.comments.length}</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

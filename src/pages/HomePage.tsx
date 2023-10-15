@@ -28,17 +28,6 @@ const HomePage = () => {
       {posts.map((post) => (
         <Card key={post._id} post={post} />
       ))}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
-      {/*<Card />*/}
     </div>
   )
 }

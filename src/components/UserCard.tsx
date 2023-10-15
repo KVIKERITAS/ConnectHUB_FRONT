@@ -1,15 +1,20 @@
-import {AiOutlineSend} from 'react-icons/ai'
+import { AiOutlineSend } from 'react-icons/ai'
+import { TUsers } from '../pages/UsersPage.tsx'
 
-const UserCard = () => {
+type TUserCardProps = {
+  user: TUsers
+}
+
+const UserCard = ({ user }: TUserCardProps) => {
   return (
     <div className="flex bg-gray-900 p-2 rounded gap-2 flex-col justify-center items-center">
       <img
-        className="rounded-full h-[150px]"
-        src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+        className="rounded-full h-[150px] w-[150px]"
+        src={user.image}
         alt=""
       />
       <div className="flex flex-col items-center gap-2 w-full">
-        <p className="text-sm">Username</p>
+        <p className="text-sm">{user.username}</p>
         <div className="text-sm font-normal bg-gray-800 w-full justify-center flex cursor-pointer p-2 rounded hover:bg-gray-700">
           <AiOutlineSend className="text-gray-500" />
         </div>
