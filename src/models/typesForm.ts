@@ -32,8 +32,13 @@ export const createPostSchema = z.object({
   message: z.string().min(1, 'Text area is empty'),
 })
 
+export const commentSchema = z.object({
+  comment: z.string().min(1, 'Comment is empty'),
+})
+
 export type TRegisterSchema = z.infer<typeof registerSchema>
 export type TLoginSchema = z.infer<typeof loginSchema>
 export type TImageChangeSchema = z.infer<typeof imageChangeSchema>
 export type TPasswordChangeSchema = z.infer<typeof passwordChangeSchema>
 export type TCreatePostSchema = z.infer<typeof createPostSchema>
+export type TCommentSchema = z.infer<typeof commentSchema>
