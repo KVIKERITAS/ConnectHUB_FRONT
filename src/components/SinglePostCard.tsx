@@ -39,7 +39,7 @@ const SinglePostCard = ({ post }: TSinglePostCardProps) => {
             />
             <p className="text-sm mb-2">{post.username}</p>
           </div>
-          <button className="text-sm font-bolder bg-gray-800 justify-center items-center flex cursor-pointer p-2 rounded hover:bg-gray-700 gap-10">
+          <button className="text-sm font-bolder bg-gray-800 flex justify-center items-center cursor-pointer p-2 rounded hover:bg-gray-700 gap-10">
             Send a message
             <AiOutlineSend className="text-gray-500" />
           </button>

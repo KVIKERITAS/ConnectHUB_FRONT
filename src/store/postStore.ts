@@ -9,6 +9,7 @@ export type TPost = {
   userImage: string
   comments: []
   likes: []
+  createdAt: Date
 }
 
 type TPostStore = {
