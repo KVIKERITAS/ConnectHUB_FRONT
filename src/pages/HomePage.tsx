@@ -1,5 +1,5 @@
 import Card from '../components/Card.tsx'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import axios from 'axios'
 import { useUserStore } from '../store/userStore.ts'
 import { usePostStore } from '../store/postStore.ts'

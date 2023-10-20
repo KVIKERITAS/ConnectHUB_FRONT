@@ -1,4 +1,4 @@
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
 import React from 'react'
 import { useUserStore } from '../store/userStore.ts'
 import { useForm } from 'react-hook-form'
@@ -90,7 +90,7 @@ const EditProfileModal = ({
     <>
       {showEditProfileModal && (
         <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-          <div className="w-[400px] flex flex-col">
+          <div className="w-[450px] flex flex-col">
             <button
               className="text-white text-xl place-self-end"
               onClick={() => setShowEditProfileModal(false)}
@@ -125,7 +125,10 @@ const EditProfileModal = ({
                     className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80 text-sm"
                   />
                   {errors.image ? (
-                    <p className="text-red-500 text-sm text-center">{`${errors.image.message}`}</p>
+                    <p className="text-red-500 flex items-center gap-1 justify-center text-sm">
+                      <AiOutlineWarning />
+                      {errors.image.message}
+                    </p>
                   ) : (
                     <p className="h-[20px]"></p>
                   )}
@@ -150,7 +153,10 @@ const EditProfileModal = ({
                     className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80 text-sm mt-10"
                   />
                   {errorsPassword.password ? (
-                    <p className="text-red-500 text-sm text-center">{`${errorsPassword.password.message}`}</p>
+                    <p className="text-red-500 flex items-center gap-1 justify-center text-sm">
+                      <AiOutlineWarning />
+                      {errorsPassword.password.message}
+                    </p>
                   ) : (
                     <p className="h-[20px]"></p>
                   )}

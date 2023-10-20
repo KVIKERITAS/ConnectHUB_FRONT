@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { loginSchema, TLoginSchema } from '../models/typesForm.ts'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AiOutlineClose } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useUserStore } from '../store/userStore.ts'
@@ -52,7 +52,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
     <>
       {showLoginModal && (
         <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
-          <div className="w-[400px] flex flex-col">
+          <div className="w-[450px] flex flex-col">
             <button
               className="text-white text-xl place-self-end"
               onClick={() => setShowLoginModal(false)}
@@ -81,7 +81,10 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
                   className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
                 />
                 {errors.username ? (
-                  <p className="text-red-500">{`${errors.username.message}`}</p>
+                  <p className="text-red-500 flex items-center gap-1 justify-center">
+                    <AiOutlineWarning />
+                    {errors.username.message}
+                  </p>
                 ) : (
                   <p className="h-[24px]"></p>
                 )}
@@ -92,7 +95,10 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
                   className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
                 />
                 {errors.password ? (
-                  <p className="text-red-500">{`${errors.password.message}`}</p>
+                  <p className="text-red-500 flex items-center gap-1 justify-center">
+                    <AiOutlineWarning />
+                    {errors.password.message}
+                  </p>
                 ) : (
                   <p className="h-[24px]"></p>
                 )}
