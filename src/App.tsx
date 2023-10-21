@@ -8,15 +8,24 @@ import InboxPage from './pages/InboxPage.tsx'
 import UsersPage from './pages/UsersPage.tsx'
 import { ToastContainer } from 'react-toastify'
 import { useUserStore } from './store/userStore.ts'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EditProfileModal from './components/EditProfileModal.tsx'
 import SinglePostPage from './pages/SinglePostPage.tsx'
 import CreatePostModal from './components/CreatePostModal.tsx'
+import { io } from 'socket.io-client'
+
+export const socket = io('http://localhost:8080', {
+  autoConnect: true,
+})
 
 function App() {
   const user = useUserStore((state) => state.user)
   const [showEditProfileModal, setShowEditProfileModal] = useState(false)
   const [showCreatePostModal, setShowCreatePostModal] = useState(false)
+
+  useEffect(() => {
+    socket.on('connect', () => {})
+  }, [])
 
   return (
     <>
