@@ -37,6 +37,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
           ...formData,
         },
       )
+      console.log(data.user._id)
       setUser(data.user)
       setUserToken(data.token)
       reset()

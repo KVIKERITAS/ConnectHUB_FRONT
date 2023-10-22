@@ -1,13 +1,14 @@
 import InboxUserCard from './InboxUserCard.tsx'
+import { useInboxStore } from '../store/inboxStore.ts'
 
 const InboxUsersContainer = () => {
+  const inbox = useInboxStore((state) => state.inbox)
+
   return (
-    <div className="bg-gray-900 min-h-[850px] rounded flex-initial w-1/2 p-2 flex flex-col gap-2 overflow-auto">
-      <InboxUserCard />
-      <InboxUserCard />
-      <InboxUserCard />
-      <InboxUserCard />
-      <InboxUserCard />
+    <div className="bg-gray-900 h-[850px] rounded w-1/2 p-2 overflow-auto">
+      {inbox.map((chat, idx) => (
+        <InboxUserCard key={idx} chat={chat} />
+      ))}
     </div>
   )
 }

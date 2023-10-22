@@ -1,21 +1,9 @@
-import {create} from 'zustand'
-
-type TUser = {
-  id: string
-  image: string
-  username: string
-}
-
-type TUserStore = {
-  user: TUser | null
-  userToken: string | null
-  setUser: (data: TUser | null) => void
-  setUserToken: (data: string) => void
-}
+import { create } from 'zustand'
+import { TUserStore } from '../models/typesUserStore.ts'
 
 export const useUserStore = create<TUserStore>((set) => ({
   user: null,
   userToken: null,
-  setUser: (data) => set({user: data}),
-  setUserToken: (data) => set({userToken: data}),
+  setUser: (data) => set({ user: data }),
+  setUserToken: (data) => set({ userToken: data }),
 }))

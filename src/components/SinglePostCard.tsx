@@ -1,9 +1,9 @@
 import { AiFillHeart, AiOutlineHeart, AiOutlineSend } from 'react-icons/ai'
-import { TPost } from '../store/postStore.ts'
 import { useUserStore } from '../store/userStore.ts'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { TPost } from '../models/typesPostStore.ts'
 
 type TSinglePostCardProps = {
   post: TPost
@@ -12,7 +12,7 @@ type TSinglePostCardProps = {
 const SinglePostCard = ({ post }: TSinglePostCardProps) => {
   const userToken = useUserStore((state) => state.userToken)
   const user = useUserStore((state) => state.user)
-  const isLiked = post.likes.find((like) => like === user?.id)
+  const isLiked = post.likes.find((like) => like === user?._id)
 
   const handleLike = async () => {
     try {

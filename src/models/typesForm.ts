@@ -36,9 +36,17 @@ export const commentSchema = z.object({
   comment: z.string().min(1, 'Comment is empty'),
 })
 
+export const messageSchema = z.object({
+  message: z
+    .string()
+    .min(1, 'Cannot send empty message')
+    .max(1000, 'Message cannot exceed 1000 characters'),
+})
+
 export type TRegisterSchema = z.infer<typeof registerSchema>
 export type TLoginSchema = z.infer<typeof loginSchema>
 export type TImageChangeSchema = z.infer<typeof imageChangeSchema>
 export type TPasswordChangeSchema = z.infer<typeof passwordChangeSchema>
 export type TCreatePostSchema = z.infer<typeof createPostSchema>
 export type TCommentSchema = z.infer<typeof commentSchema>
+export type TMessageSchema = z.infer<typeof messageSchema>

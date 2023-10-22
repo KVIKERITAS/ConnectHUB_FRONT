@@ -1,21 +1,31 @@
-const InboxMessage = () => {
+import { useUserStore } from '../store/userStore.ts'
+
+type TInboxMessageProps = {
+  chatMessage: {
+    userId: string
+    message: string | null
+  }
+}
+
+const InboxMessage = ({ chatMessage }: TInboxMessageProps) => {
+  const user = useUserStore((state) => state.user)
+
   return (
-    <div className="bg-gray-900 rounded p-2 w-fit max-w-[50%]">
-      <p className="font-thin text-sm">
-        Message Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-        Aperiam aspernatur cupiditate dicta eius exercitationem incidunt
-        laboriosam libero necessitatibus nesciunt omnis. Consequuntur inventore
-        libero nam nulla quisquam repudiandae? Amet deleniti ducimus nesciunt
-        rem sequi sunt velit. Ad alias assumenda at aut autem consectetur
-        corporis dignissimos dolorem doloribus error et eveniet fugiat incidunt
-        iure, iusto magnam maxime modi nisi nostrum nulla perferendis
-        perspiciatis placeat porro possimus quam quia ratione recusandae
-        repudiandae soluta tenetur unde velit voluptas voluptate? Enim officia
-        perspiciatis quasi? Ab ad adipisci culpa inventore ipsam libero modi
-        pariatur repellendus saepe! A alias corporis dolorem fugit, ipsa odio
-        sint? Beatae, omnis.
-      </p>
-    </div>
+    <>
+      {chatMessage.message && user ? (
+        <div
+          className={`rounded p-2 w-fit max-w-[50%] ${
+            chatMessage.userId === user._id
+              ? 'self-end bg-gray-800'
+              : 'bg-gray-900'
+          }`}
+        >
+          <p className="font-thin text-sm">{chatMessage.message}</p>
+        </div>
+      ) : (
+        <p className="text-center text-sm font-normal"> No messages</p>
+      )}
+    </>
   )
 }
 
