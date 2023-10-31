@@ -28,7 +28,11 @@ const SinglePostCard = ({ post }: TSinglePostCardProps) => {
 
   return (
     <div className="max-w-full bg-gray-900 rounded-lg shadow flex flex-col lg:flex-row">
-      <img className="rounded-t-lg lg:rounded-l-lg" src={post.image} alt="" />
+      <img
+        className="rounded-t-lg lg:rounded-l-lg max-w-[30%]"
+        src={post.image}
+        alt=""
+      />
       <div className="p-5 flex flex-col justify-between">
         <div className="flex items-center justify-between">
           <div className="flex gap-1 items-center">

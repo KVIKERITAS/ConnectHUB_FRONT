@@ -22,7 +22,7 @@ const RegisterModal = ({
     handleSubmit,
     reset,
   } = useForm<TRegisterSchema>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(registerSchema),
   })
 
