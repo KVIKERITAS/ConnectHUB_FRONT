@@ -7,17 +7,21 @@ import { toast } from 'react-toastify'
 import { IErrorBackend } from '../models/typesBackEndError.ts'
 import axios from 'axios'
 import { useUserStore } from '../store/userStore.ts'
+import { TUsers } from '../pages/UsersPage.tsx'
 
 type TNewMessageModalProps = {
   showNewMessageModal: boolean
   setShowNewMessageModal: React.Dispatch<React.SetStateAction<boolean>>
+  user: TUsers
 }
 
 const NewMessageModal = ({
   showNewMessageModal,
   setShowNewMessageModal,
+  user,
 }: TNewMessageModalProps) => {
   const userToken = useUserStore((state) => state.userToken)
+  const currentUser = useUserStore((state) => state.user)
 
   const {
     register,
@@ -29,13 +33,16 @@ const NewMessageModal = ({
     resolver: zodResolver(messageSchema),
   })
 
-  const onSubmit = async (postData: TMessageSchema) => {
+  const onSubmit = async (messageData: TMessageSchema) => {
     try {
+      const dataToSend = {
+        participants: [currentUser, user],
+        chat: { userId: currentUser?._id, ...messageData },
+      }
+
       const { data } = await axios.post(
         'http://localhost:8080/api/chat/send/message',
-        {
-          ...postData,
-        },
+        { ...dataToSend },
         { headers: { Authorization: `${userToken}` } },
       )
       toast.success(data.message)
@@ -66,7 +73,7 @@ const NewMessageModal = ({
                 <p className="font-bold">ConnectHub</p>
               </div>
               <h5 className="text-xl text-white mb-5 ml-1 text-center">
-                Create new post:
+                Start new conversation with <b>{user.username}</b>:
               </h5>
               <div className="flex flex-col gap-2 items-center">
                 <form

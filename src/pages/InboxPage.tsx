@@ -46,7 +46,7 @@ const InboxPage = () => {
       <InboxUsersContainer />
       {selectedChat && (
         <div className="bg-gray-700 w-full rounded flex flex-col justify-between">
-          <div className="p-2 flex flex-col gap-1">
+          <div className="p-2 flex flex-col gap-1 h-[90%] justify-end">
             {selectedChat?.chat.map((chatMessage, idx) => (
               <InboxMessage key={idx} chatMessage={chatMessage} />
             ))}

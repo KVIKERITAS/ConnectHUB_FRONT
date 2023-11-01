@@ -2,7 +2,6 @@ import UserCard from '../components/UserCard.tsx'
 import axios from 'axios'
 import { useUserStore } from '../store/userStore.ts'
 import { useEffect, useState } from 'react'
-import NewMessageModal from '../components/NewMessageModal.tsx'
 
 export type TUsers = {
   _id: string
@@ -11,7 +10,6 @@ export type TUsers = {
 }
 
 const UsersPage = () => {
-  const [showNewMessageModal, setShowNewMessageModal] = useState(false)
   const userToken = useUserStore((state) => state.userToken)
   const [allUsers, setAllUsers] = useState<TUsers[] | undefined>(undefined)
 
@@ -31,10 +29,6 @@ const UsersPage = () => {
     <div className="flex flex-wrap gap-2">
       {allUsers &&
         allUsers.map((user) => <UserCard key={user._id} user={user} />)}
-      <NewMessageModal
-        showNewMessageModal={showNewMessageModal}
-        setShowNewMessageModal={setShowNewMessageModal}
-      />
     </div>
   )
 }
