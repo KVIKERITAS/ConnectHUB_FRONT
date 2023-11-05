@@ -13,17 +13,44 @@ import EditProfileModal from './components/EditProfileModal.tsx'
 import SinglePostPage from './pages/SinglePostPage.tsx'
 import CreatePostModal from './components/CreatePostModal.tsx'
 import { io } from 'socket.io-client'
+import axios from 'axios'
 
 export const socket = io('http://localhost:8080', {
   autoConnect: true,
 })
 
 function App() {
-  const user = useUserStore((state) => state.user)
+  const { user, setUser, userToken, setUserToken } = useUserStore((state) => ({
+    user: state.user,
+    setUser: state.setUser,
+    userToken: state.userToken,
+    setUserToken: state.setUserToken,
+  }))
   const [showEditProfileModal, setShowEditProfileModal] = useState(false)
   const [showCreatePostModal, setShowCreatePostModal] = useState(false)
 
+  const autologin = async (token: string) => {
+    const { data } = await axios.get(
+      'http://localhost:8080/api/users/autologin',
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      },
+    )
+
+    if (!data.error) {
+      setUserToken(token)
+      setUser(data.user)
+    }
+  }
+
   useEffect(() => {
+    const token = window.localStorage.getItem('token')
+    if (token) {
+      autologin(token)
+    }
+
     socket.on('connect', () => {})
   }, [])
 

@@ -7,6 +7,7 @@ export type TInbox = {
     userId: string
     message: string | null
   }[]
+  updatedAt: Date
 }
 
 export type TInboxStore = {

@@ -27,6 +27,7 @@ const SideBar = ({
 
   const logOut = () => {
     setUser(null)
+    window.localStorage.removeItem('token')
   }
 
   return (

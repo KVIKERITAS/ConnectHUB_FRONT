@@ -23,7 +23,7 @@ const InboxMessage = ({ chatMessage }: TInboxMessageProps) => {
           <p className="font-thin text-sm">{chatMessage.message}</p>
         </div>
       ) : (
-        <p className="text-center text-sm font-normal"> No messages</p>
+        <p className="text-center text-sm font-normal">No messages</p>
       )}
     </>
   )

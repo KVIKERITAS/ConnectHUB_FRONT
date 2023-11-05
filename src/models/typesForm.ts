@@ -17,6 +17,7 @@ export const registerSchema = z
 export const loginSchema = z.object({
   username: z.string().min(1, 'Username is required'),
   password: z.string().min(1, 'Password is required'),
+  autologin: z.boolean(),
 })
 
 export const imageChangeSchema = z.object({

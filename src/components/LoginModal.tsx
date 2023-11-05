@@ -37,8 +37,14 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
           ...formData,
         },
       )
+      console.log(data)
       setUser(data.user)
       setUserToken(data.token)
+
+      if (formData.autologin) {
+        window.localStorage.setItem('token', data.token)
+      }
+
       reset()
       setShowLoginModal(false)
     } catch (error: unknown) {
@@ -102,6 +108,15 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
                 ) : (
                   <p className="h-[24px]"></p>
                 )}
+
+                <div className="text-white font-bolder flex items-center">
+                  <input
+                    {...register('autologin')}
+                    type="checkbox"
+                    className="mr-2"
+                  />
+                  Remember me
+                </div>
 
                 <button
                   type="submit"

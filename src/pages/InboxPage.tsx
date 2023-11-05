@@ -7,9 +7,18 @@ import { messageSchema, TMessageSchema } from '../models/typesForm.ts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUserStore } from '../store/userStore.ts'
 import axios from 'axios'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { IErrorBackend } from '../models/typesBackEndError.ts'
 
 const InboxPage = () => {
-  const selectedChat = useInboxStore((state) => state.selectedChat)
+  const { selectedChat, setInbox, setSelectedChat } = useInboxStore(
+    (state) => ({
+      selectedChat: state.selectedChat,
+      setInbox: state.setInbox,
+      setSelectedChat: state.setSelectedChat,
+    }),
+  )
   const { currentUser, userToken } = useUserStore((state) => ({
     currentUser: state.user,
     userToken: state.userToken,
@@ -37,9 +46,25 @@ const InboxPage = () => {
       { ...dataToSend },
       { headers: { Authorization: `${userToken}` } },
     )
-    console.log(data)
+    setSelectedChat(data)
     reset()
   }
+
+  const getInbox = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/chat/get/inbox/${currentUser?._id}`,
+        { headers: { Authorization: `${userToken}` } },
+      )
+      setInbox(data.inbox)
+    } catch (error) {
+      toast.error((error as IErrorBackend).response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    getInbox()
+  }, [])
 
   return (
     <div className="flex gap-1">

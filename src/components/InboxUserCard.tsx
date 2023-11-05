@@ -26,7 +26,7 @@ const InboxUserCard = ({ chat }: TInboxUserCardProps) => {
       {inboxHolder && (
         <>
           <img
-            className="rounded-full h-[40px]"
+            className="rounded-full h-[40px] w-[40px]"
             src={inboxHolder?.image}
             alt=""
           />
