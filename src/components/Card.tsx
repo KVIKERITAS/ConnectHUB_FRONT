@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { IErrorBackend } from '../models/typesBackEndError.ts'
 import { useUserStore } from '../store/userStore.ts'
 import { TPost } from '../models/typesPostStore.ts'
+import { usePostStore } from '../store/postStore.ts'
 
 type TCardProps = {
   post: TPost
@@ -14,6 +15,7 @@ const Card = ({ post }: TCardProps) => {
   const userToken = useUserStore((state) => state.userToken)
   const user = useUserStore((state) => state.user)
   const isLiked = post.likes.find((like) => like === user?._id)
+  const setPosts = usePostStore((state) => state.setPosts)
 
   const handleLike = async () => {
     try {
@@ -21,6 +23,7 @@ const Card = ({ post }: TCardProps) => {
         `http://localhost:8080/api/posts/like/${post._id}`,
         { headers: { Authorization: `${userToken}` } },
       )
+      setPosts(data.posts)
       toast.success(data.message)
     } catch (error: unknown) {
       toast.error((error as IErrorBackend).response.data.message)

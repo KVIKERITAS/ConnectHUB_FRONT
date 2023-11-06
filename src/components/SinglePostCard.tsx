@@ -7,14 +7,15 @@ import { TPost } from '../models/typesPostStore.ts'
 import { useInboxStore } from '../store/inboxStore.ts'
 import { useNavigate } from 'react-router-dom'
 import NewMessageModal from './NewMessageModal.tsx'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { TUser } from '../models/typesUserStore.ts'
 
 type TSinglePostCardProps = {
   post: TPost
+  setPost: React.Dispatch<React.SetStateAction<TPost | undefined>>
 }
 
-const SinglePostCard = ({ post }: TSinglePostCardProps) => {
+const SinglePostCard = ({ post, setPost }: TSinglePostCardProps) => {
   const userToken = useUserStore((state) => state.userToken)
   const user = useUserStore((state) => state.user)
   const isLiked = post.likes.find((like) => like === user?._id)
@@ -33,6 +34,7 @@ const SinglePostCard = ({ post }: TSinglePostCardProps) => {
         `http://localhost:8080/api/posts/like/${post._id}`,
         { headers: { Authorization: `${userToken}` } },
       )
+      setPost(data.post)
       toast.success(data.message)
     } catch (error: unknown) {
       toast.error((error as IErrorBackend).response.data.message)

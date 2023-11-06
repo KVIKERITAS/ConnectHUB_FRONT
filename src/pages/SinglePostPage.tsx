@@ -30,7 +30,7 @@ const SinglePostPage = () => {
     <>
       {post && (
         <>
-          <SinglePostCard post={post} />
+          <SinglePostCard post={post} setPost={setPost} />
           <CommentForm postId={post._id} />
           {post.comments &&
             post.comments.map((comment, idx) => (
