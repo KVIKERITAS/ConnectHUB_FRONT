@@ -10,15 +10,14 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { socket } from '../App.tsx'
 
 const InboxPage = () => {
-  const { selectedChat, setInbox, setSelectedChat } = useInboxStore(
-    (state) => ({
-      selectedChat: state.selectedChat,
-      setInbox: state.setInbox,
-      setSelectedChat: state.setSelectedChat,
-    }),
-  )
+  const { selectedChat, setInbox } = useInboxStore((state) => ({
+    selectedChat: state.selectedChat,
+    setInbox: state.setInbox,
+    setSelectedChat: state.setSelectedChat,
+  }))
   const { currentUser, userToken } = useUserStore((state) => ({
     currentUser: state.user,
     userToken: state.userToken,
@@ -41,12 +40,13 @@ const InboxPage = () => {
       chat: { userId: currentUser?._id, ...messageData },
     }
 
-    const { data } = await axios.post(
-      'http://localhost:8080/api/chat/send/message',
-      { ...dataToSend },
-      { headers: { Authorization: `${userToken}` } },
-    )
-    setSelectedChat(data)
+    // const { data } = await axios.post(
+    //   'http://localhost:8080/api/chat/send/message',
+    //   { ...dataToSend },
+    //   { headers: { Authorization: `${userToken}` } },
+    // )
+    // setSelectedChat(data)
+    socket.emit('sendMessage', dataToSend)
     reset()
   }
 
@@ -70,8 +70,8 @@ const InboxPage = () => {
     <div className="flex gap-1">
       <InboxUsersContainer />
       {selectedChat && (
-        <div className="bg-gray-700 w-full rounded flex flex-col justify-between">
-          <div className="p-2 flex flex-col gap-1 h-[90%] justify-end">
+        <div className="bg-gray-700 w-full rounded max-h-[53rem] flex flex-col justify-between overflow-auto">
+          <div className="p-2 flex flex-col gap-1 justify-end">
             {selectedChat?.chat.map((chatMessage, idx) => (
               <InboxMessage key={idx} chatMessage={chatMessage} />
             ))}

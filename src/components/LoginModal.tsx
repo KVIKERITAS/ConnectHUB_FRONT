@@ -7,6 +7,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useUserStore } from '../store/userStore.ts'
 import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { useInboxStore } from '../store/inboxStore.ts'
 
 type TLoginModal = {
   showLoginModal: boolean
@@ -18,6 +19,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
     setUser: state.setUser,
     setUserToken: state.setUserToken,
   }))
+  const setSelectedChat = useInboxStore((state) => state.setSelectedChat)
 
   const {
     register,
@@ -37,9 +39,9 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
           ...formData,
         },
       )
-      console.log(data)
       setUser(data.user)
       setUserToken(data.token)
+      setSelectedChat(null)
 
       if (formData.autologin) {
         window.localStorage.setItem('token', data.token)

@@ -14,18 +14,21 @@ import SinglePostPage from './pages/SinglePostPage.tsx'
 import CreatePostModal from './components/CreatePostModal.tsx'
 import { io } from 'socket.io-client'
 import axios from 'axios'
+import { useInboxStore } from './store/inboxStore.ts'
 
 export const socket = io('http://localhost:8080', {
   autoConnect: true,
 })
 
 function App() {
-  const { user, setUser, userToken, setUserToken } = useUserStore((state) => ({
+  const { user, setUser, setUserToken } = useUserStore((state) => ({
     user: state.user,
     setUser: state.setUser,
     userToken: state.userToken,
     setUserToken: state.setUserToken,
   }))
+  const setSelectedChat = useInboxStore((state) => state.setSelectedChat)
+
   const [showEditProfileModal, setShowEditProfileModal] = useState(false)
   const [showCreatePostModal, setShowCreatePostModal] = useState(false)
 
@@ -42,6 +45,7 @@ function App() {
     if (!data.error) {
       setUserToken(token)
       setUser(data.user)
+      setSelectedChat(null)
     }
   }
 
@@ -50,8 +54,9 @@ function App() {
     if (token) {
       autologin(token)
     }
-
-    socket.on('connect', () => {})
+    socket.on('updateChat', (chat) => {
+      setSelectedChat(chat)
+    })
   }, [])
 
   return (
