@@ -1,14 +1,13 @@
-import { AiFillHeart, AiOutlineHeart, AiOutlineSend } from 'react-icons/ai'
-import { useUserStore } from '../store/userStore.ts'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
-import { TPost } from '../models/typesPostStore.ts'
-import { useInboxStore } from '../store/inboxStore.ts'
-import { useNavigate } from 'react-router-dom'
-import NewMessageModal from './NewMessageModal.tsx'
 import React, { useState } from 'react'
+import { AiFillHeart, AiOutlineHeart, AiOutlineSend } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { TPost } from '../models/typesPostStore.ts'
 import { TUser } from '../models/typesUserStore.ts'
+import { request } from '../services/api.tsx'
+import { useInboxStore } from '../store/inboxStore.ts'
+import { useUserStore } from '../store/userStore.ts'
+import NewMessageModal from './NewMessageModal.tsx'
 
 type TSinglePostCardProps = {
   post: TPost
@@ -29,16 +28,10 @@ const SinglePostCard = ({ post, setPost }: TSinglePostCardProps) => {
   const [userInfo, setUserInfo] = useState<TUser | null>(null)
 
   const handleLike = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:8080/api/posts/like/${post._id}`,
-        { headers: { Authorization: `${userToken}` } },
-      )
+    request.getRequest(`posts/like/${post._id}`, userToken).then((data) => {
       setPost(data.post)
       toast.success(data.message)
-    } catch (error: unknown) {
-      toast.error((error as IErrorBackend).response.data.message)
-    }
+    })
   }
 
   const handleMessage = () => {

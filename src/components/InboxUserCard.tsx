@@ -1,10 +1,8 @@
-import { TInbox } from '../models/typesInboxStore.ts'
-import { useUserStore } from '../store/userStore.ts'
-import { useInboxStore } from '../store/inboxStore.ts'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
 import { socket } from '../App.tsx'
+import { TInbox } from '../models/typesInboxStore.ts'
+import { request } from '../services/api.tsx'
+import { useInboxStore } from '../store/inboxStore.ts'
+import { useUserStore } from '../store/userStore.ts'
 
 type TInboxUserCardProps = {
   chat: TInbox
@@ -24,16 +22,12 @@ const InboxUserCard = ({ chat }: TInboxUserCardProps) => {
   )
 
   const handleChat = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:8080/api/chat/get/single/${chat._id}`,
-        { headers: { Authorization: `${userToken}` } },
-      )
-      setSelectedChat(data)
-      socket.emit('join-room', chat._id)
-    } catch (error: unknown) {
-      toast.error((error as IErrorBackend).response.data.message)
-    }
+    request
+      .getRequest(`chat/get/single/${chat._id}`, userToken)
+      .then((data) => {
+        setSelectedChat(data)
+        socket.emit('join-room', chat._id)
+      })
   }
 
   return (

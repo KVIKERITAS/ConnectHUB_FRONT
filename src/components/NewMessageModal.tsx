@@ -1,13 +1,12 @@
-import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
+import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { messageSchema, TMessageSchema } from '../models/typesForm.ts'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
 import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
-import axios from 'axios'
-import { useUserStore } from '../store/userStore.ts'
+import { TMessageSchema, messageSchema } from '../models/typesForm.ts'
 import { TUsers } from '../pages/UsersPage.tsx'
+import { request } from '../services/api.tsx'
+import { useUserStore } from '../store/userStore.ts'
 
 type TNewMessageModalProps = {
   showNewMessageModal: boolean
@@ -34,22 +33,17 @@ const NewMessageModal = ({
   })
 
   const onSubmit = async (messageData: TMessageSchema) => {
-    try {
-      const dataToSend = {
-        participants: [currentUser, user],
-        chat: { userId: currentUser?._id, ...messageData },
-      }
-
-      const { data } = await axios.post(
-        'http://localhost:8080/api/chat/send/message',
-        { ...dataToSend },
-        { headers: { Authorization: `${userToken}` } },
-      )
-      toast.success(data.message)
-      reset()
-    } catch (error: unknown) {
-      toast.error((error as IErrorBackend).response.data.message)
+    const dataToSend = {
+      participants: [currentUser, user],
+      chat: { userId: currentUser?._id, ...messageData },
     }
+
+    request
+      .postRequest('chat/send/message', dataToSend, userToken)
+      .then((data) => {
+        toast.success(data.message)
+        reset()
+      })
   }
 
   return (

@@ -1,10 +1,9 @@
-import { AiOutlineComment } from 'react-icons/ai'
-import { useForm } from 'react-hook-form'
-import { commentSchema, TCommentSchema } from '../models/typesForm.ts'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { AiOutlineComment } from 'react-icons/ai'
 import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
-import axios from 'axios'
+import { commentSchema, TCommentSchema } from '../models/typesForm.ts'
+import { request } from '../services/api.tsx'
 import { useUserStore } from '../store/userStore.ts'
 
 type TCommentFormProps = {
@@ -25,18 +24,12 @@ const CommentForm = ({ postId }: TCommentFormProps) => {
   })
 
   const onSubmit = async (commentData: TCommentSchema) => {
-    try {
-      const { data } = await axios.post(
-        `http://localhost:8080/api/posts/comment/${postId}`,
-        { ...commentData },
-        { headers: { Authorization: `${userToken}` } },
-      )
-
-      toast.success(data.message)
-      reset()
-    } catch (error: unknown) {
-      toast.error((error as IErrorBackend).response.data.message)
-    }
+    request
+      .postRequest(`posts/comment/${postId}`, commentData, userToken)
+      .then((data) => {
+        toast.success(data.message)
+        reset()
+      })
   }
 
   return (

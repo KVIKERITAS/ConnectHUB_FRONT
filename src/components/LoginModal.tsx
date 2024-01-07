@@ -1,13 +1,11 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { loginSchema, TLoginSchema } from '../models/typesForm.ts'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { useUserStore } from '../store/userStore.ts'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { TLoginSchema, loginSchema } from '../models/typesForm.ts'
+import { request } from '../services/api.tsx'
 import { useInboxStore } from '../store/inboxStore.ts'
+import { useUserStore } from '../store/userStore.ts'
 
 type TLoginModal = {
   showLoginModal: boolean
@@ -32,13 +30,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
   })
 
   const onSubmit = async (formData: TLoginSchema) => {
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8080/api/users/login',
-        {
-          ...formData,
-        },
-      )
+    request.postRequest('users/login', formData).then((data) => {
       setUser(data.user)
       setUserToken(data.token)
       setSelectedChat(null)
@@ -49,11 +41,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
 
       reset()
       setShowLoginModal(false)
-    } catch (error: unknown) {
-      if (error) {
-        toast.error((error as IErrorBackend).response.data.message)
-      }
-    }
+    })
   }
 
   return (
@@ -99,6 +87,7 @@ const LoginModal = ({ showLoginModal, setShowLoginModal }: TLoginModal) => {
 
                 <input
                   placeholder="Password"
+                  type="password"
                   {...register('password')}
                   className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
                 />

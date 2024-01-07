@@ -1,7 +1,7 @@
-import UserCard from '../components/UserCard.tsx'
-import axios from 'axios'
-import { useUserStore } from '../store/userStore.ts'
 import { useEffect, useState } from 'react'
+import UserCard from '../components/UserCard.tsx'
+import { request } from '../services/api.tsx'
+import { useUserStore } from '../store/userStore.ts'
 
 export type TUsers = {
   _id: string
@@ -13,17 +13,11 @@ const UsersPage = () => {
   const userToken = useUserStore((state) => state.userToken)
   const [allUsers, setAllUsers] = useState<TUsers[] | undefined>(undefined)
 
-  const getUsers = async () => {
-    const { data } = await axios.get('http://localhost:8080/api/users/get', {
-      headers: { Authorization: `${userToken}` },
-    })
-
-    setAllUsers(data.users)
-  }
-
   useEffect(() => {
-    getUsers()
-  }, [])
+    request
+      .getRequest('users/get', userToken)
+      .then((data) => setAllUsers(data.users))
+  })
 
   return (
     <div className="flex flex-wrap gap-2">

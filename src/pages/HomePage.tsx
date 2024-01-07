@@ -1,9 +1,10 @@
-import Card from '../components/Card.tsx'
 import { useEffect } from 'react'
-import axios from 'axios'
-import { useUserStore } from '../store/userStore.ts'
-import { usePostStore } from '../store/postStore.ts'
+import Card from '../components/Card.tsx'
 import FilterBar from '../components/FilterBar.tsx'
+import { usePostStore } from '../store/postStore.ts'
+import { useUserStore } from '../store/userStore.ts'
+
+import { request } from '../services/api.tsx'
 
 const HomePage = () => {
   const userToken = useUserStore((state) => state.userToken)
@@ -11,17 +12,19 @@ const HomePage = () => {
     posts: state.posts,
     setPosts: state.setPosts,
   }))
-  const getPosts = async () => {
-    const { data } = await axios.get('http://localhost:8080/api/posts/get', {
-      headers: { Authorization: `${userToken}` },
-    })
+  // const getPosts = async () => {
+  //   const { data } = await axios.get('http://localhost:8080/api/posts/get', {
+  //     headers: { Authorization: `${userToken}` },
+  //   })
 
-    return setPosts(data.posts)
-  }
+  //   return setPosts(data.posts)
+  // }
 
   useEffect(() => {
-    getPosts()
-  }, [])
+    request
+      .getRequest('posts/get', userToken)
+      .then((data) => setPosts(data.posts))
+  })
 
   return (
     <>

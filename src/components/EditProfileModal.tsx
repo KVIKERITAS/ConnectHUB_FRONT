@@ -1,17 +1,16 @@
-import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
+import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
-import { useUserStore } from '../store/userStore.ts'
 import { useForm } from 'react-hook-form'
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 import {
-  imageChangeSchema,
-  passwordChangeSchema,
   TImageChangeSchema,
   TPasswordChangeSchema,
+  imageChangeSchema,
+  passwordChangeSchema,
 } from '../models/typesForm.ts'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
-import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { request } from '../services/api.tsx'
+import { useUserStore } from '../store/userStore.ts'
 
 type TEditProfileModalProps = {
   showEditProfileModal: boolean
@@ -48,42 +47,24 @@ const EditProfileModal = ({
   })
 
   const onImageChange = async (imageData: TImageChangeSchema) => {
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8080/api/users/change/image',
-        {
-          ...imageData,
-        },
-        { headers: { Authorization: `${userToken}` } },
-      )
-      setUser(data)
-      toast.success('Image changed successfully')
-      reset()
-      setShowEditProfileModal(false)
-    } catch (error: unknown) {
-      if (error) {
-        toast.error((error as IErrorBackend).response.data.message)
-      }
-    }
+    request
+      .postRequest('users/change/image', imageData, userToken)
+      .then((data) => {
+        setUser(data)
+        toast.success('Image changed successfully')
+        reset()
+        setShowEditProfileModal(false)
+      })
   }
 
   const onPasswordChange = async (passwordData: TPasswordChangeSchema) => {
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8080/api/users/change/password',
-        {
-          ...passwordData,
-        },
-        { headers: { Authorization: `${userToken}` } },
-      )
-      toast.success(data.message)
-      resetPassword()
-      setShowEditProfileModal(false)
-    } catch (error: unknown) {
-      if (error) {
-        toast.error((error as IErrorBackend).response.data.message)
-      }
-    }
+    request
+      .postRequest('users/change/password', passwordData, userToken)
+      .then((data) => {
+        toast.success(data.message)
+        resetPassword()
+        setShowEditProfileModal
+      })
   }
 
   return (

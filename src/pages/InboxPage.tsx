@@ -1,16 +1,14 @@
-import { AiOutlineSend, AiOutlineWarning } from 'react-icons/ai'
-import InboxUsersContainer from '../components/InboxUsersContainer.tsx'
-import InboxMessage from '../components/InboxMessage.tsx'
-import { useInboxStore } from '../store/inboxStore.ts'
-import { useForm } from 'react-hook-form'
-import { messageSchema, TMessageSchema } from '../models/typesForm.ts'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useUserStore } from '../store/userStore.ts'
-import axios from 'axios'
 import { useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { useForm } from 'react-hook-form'
+import { AiOutlineSend, AiOutlineWarning } from 'react-icons/ai'
 import { socket } from '../App.tsx'
+import InboxMessage from '../components/InboxMessage.tsx'
+import InboxUsersContainer from '../components/InboxUsersContainer.tsx'
+import { TMessageSchema, messageSchema } from '../models/typesForm.ts'
+import { request } from '../services/api.tsx'
+import { useInboxStore } from '../store/inboxStore.ts'
+import { useUserStore } from '../store/userStore.ts'
 
 const InboxPage = () => {
   const { selectedChat, setInbox } = useInboxStore((state) => ({
@@ -40,31 +38,15 @@ const InboxPage = () => {
       chat: { userId: currentUser?._id, ...messageData },
     }
 
-    // const { data } = await axios.post(
-    //   'http://localhost:8080/api/chat/send/message',
-    //   { ...dataToSend },
-    //   { headers: { Authorization: `${userToken}` } },
-    // )
-    // setSelectedChat(data)
     socket.emit('sendMessage', dataToSend)
     reset()
   }
 
-  const getInbox = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:8080/api/chat/get/inbox/${currentUser?._id}`,
-        { headers: { Authorization: `${userToken}` } },
-      )
-      setInbox(data.inbox)
-    } catch (error) {
-      toast.error((error as IErrorBackend).response.data.message)
-    }
-  }
-
   useEffect(() => {
-    getInbox()
-  }, [])
+    request
+      .getRequest(`chat/get/inbox/${currentUser?._id}`, userToken)
+      .then((data) => setInbox(data.inbox))
+  })
 
   return (
     <div className="flex gap-1">

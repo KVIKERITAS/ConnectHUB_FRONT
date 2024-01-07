@@ -1,20 +1,20 @@
-import './App.css'
-import 'react-toastify/dist/ReactToastify.css'
-import MainPage from './pages/MainPage.tsx'
-import SideBar from './components/SideBar.tsx'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { io } from 'socket.io-client'
+import './App.css'
+import CreatePostModal from './components/CreatePostModal.tsx'
+import EditProfileModal from './components/EditProfileModal.tsx'
+import SideBar from './components/SideBar.tsx'
 import HomePage from './pages/HomePage.tsx'
 import InboxPage from './pages/InboxPage.tsx'
-import UsersPage from './pages/UsersPage.tsx'
-import { ToastContainer } from 'react-toastify'
-import { useUserStore } from './store/userStore.ts'
-import { useEffect, useState } from 'react'
-import EditProfileModal from './components/EditProfileModal.tsx'
+import MainPage from './pages/MainPage.tsx'
 import SinglePostPage from './pages/SinglePostPage.tsx'
-import CreatePostModal from './components/CreatePostModal.tsx'
-import { io } from 'socket.io-client'
-import axios from 'axios'
+import UsersPage from './pages/UsersPage.tsx'
+import { request } from './services/api.tsx'
 import { useInboxStore } from './store/inboxStore.ts'
+import { useUserStore } from './store/userStore.ts'
 
 export const socket = io('http://localhost:8080', {
   autoConnect: true,
@@ -32,32 +32,23 @@ function App() {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false)
   const [showCreatePostModal, setShowCreatePostModal] = useState(false)
 
-  const autologin = async (token: string) => {
-    const { data } = await axios.get(
-      'http://localhost:8080/api/users/autologin',
-      {
-        headers: {
-          Authorization: `${token}`,
-        },
-      },
-    )
-
-    if (!data.error) {
-      setUserToken(token)
-      setUser(data.user)
-      setSelectedChat(null)
-    }
-  }
-
   useEffect(() => {
     const token = window.localStorage.getItem('token')
+
     if (token) {
-      autologin(token)
+      request.getRequest('users/autologin', token).then((data) => {
+        if (!data.error) {
+          setUserToken(token)
+          setUser(data.user)
+          setSelectedChat(null)
+        }
+      })
     }
+
     socket.on('updateChat', (chat) => {
       setSelectedChat(chat)
     })
-  }, [])
+  })
 
   return (
     <>

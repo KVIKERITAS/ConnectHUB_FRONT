@@ -1,30 +1,22 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import SinglePostCard from '../components/SinglePostCard.tsx'
 import CommentForm from '../components/CommentForm.tsx'
 import SingleCommentCard from '../components/SingleCommentCard.tsx'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useUserStore } from '../store/userStore.ts'
+import SinglePostCard from '../components/SinglePostCard.tsx'
 import { TPost } from '../models/typesPostStore.ts'
+import { request } from '../services/api.tsx'
+import { useUserStore } from '../store/userStore.ts'
 
 const SinglePostPage = () => {
   const { post_id } = useParams()
   const userToken = useUserStore((state) => state.userToken)
   const [post, setPost] = useState<TPost | undefined>(undefined)
 
-  const getPost = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8080/api/posts/get/${post_id}`,
-      {
-        headers: { Authorization: `${userToken}` },
-      },
-    )
-    return setPost(data)
-  }
-
   useEffect(() => {
-    getPost()
-  }, [])
+    request
+      .getRequest(`posts/get/${post_id}`, userToken)
+      .then((data) => setPost(data))
+  })
 
   return (
     <>

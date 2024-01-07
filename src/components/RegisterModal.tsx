@@ -1,11 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
-import { registerSchema, TRegisterSchema } from '../models/typesForm.ts'
 import React from 'react'
-import axios from 'axios'
+import { useForm } from 'react-hook-form'
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai'
 import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
+import { TRegisterSchema, registerSchema } from '../models/typesForm.ts'
+import { request } from '../services/api.tsx'
 
 type TRegisterModal = {
   showRegisterModal: boolean
@@ -27,19 +26,11 @@ const RegisterModal = ({
   })
 
   const onSubmit = async (formData: TRegisterSchema) => {
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8080/api/users/register',
-        {
-          ...formData,
-        },
-      )
-      reset()
+    request.postRequest('users/register', formData).then((data) => {
       toast.success(data.message)
       setShowRegisterModal(false)
-    } catch (error) {
-      if (error) toast.error((error as IErrorBackend).response.data.message)
-    }
+      reset()
+    })
   }
 
   return (
@@ -86,6 +77,7 @@ const RegisterModal = ({
 
                 <input
                   placeholder="Password"
+                  type="password"
                   {...register('password')}
                   className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
                 />
@@ -100,6 +92,7 @@ const RegisterModal = ({
 
                 <input
                   placeholder="Confirm Password"
+                  type="password"
                   {...register('confirmPassword')}
                   className="px-4 py-2 rounded bg-gray-900 focus:outline-0 text-white bg-opacity-80"
                 />

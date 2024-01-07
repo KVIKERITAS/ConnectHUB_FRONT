@@ -1,11 +1,10 @@
 import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import { toast } from 'react-toastify'
-import { IErrorBackend } from '../models/typesBackEndError.ts'
-import { useUserStore } from '../store/userStore.ts'
 import { TPost } from '../models/typesPostStore.ts'
+import { request } from '../services/api.tsx'
 import { usePostStore } from '../store/postStore.ts'
+import { useUserStore } from '../store/userStore.ts'
 
 type TCardProps = {
   post: TPost
@@ -18,16 +17,12 @@ const Card = ({ post }: TCardProps) => {
   const setPosts = usePostStore((state) => state.setPosts)
 
   const handleLike = async () => {
-    try {
-      const { data } = await axios.get(
-        `http://localhost:8080/api/posts/like/${post._id}`,
-        { headers: { Authorization: `${userToken}` } },
-      )
-      setPosts(data.posts)
-      toast.success(data.message)
-    } catch (error: unknown) {
-      toast.error((error as IErrorBackend).response.data.message)
-    }
+    await request
+      .getRequest(`posts/like/${post._id}`, userToken)
+      .then((data) => {
+        setPosts(data.posts)
+        toast.success(data.message)
+      })
   }
 
   return (
